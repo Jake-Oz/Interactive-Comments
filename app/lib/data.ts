@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { user, comment } from "@/app/lib/types";
+import { comment } from "@/app/lib/types";
 
 type updatedComment = Omit<comment, "replyCommentIds"> & {
   username: string;
