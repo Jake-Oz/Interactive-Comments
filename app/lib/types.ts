@@ -42,10 +42,10 @@ export type user = {
 
 export type comment = {
   id: number;
-  userId: string;
+  user_id: string;
   content: string;
-  createdAt: string;
+  created_at: string;
   score: number;
-  isReply: boolean;
+  is_reply: boolean;
   replyCommentIds: number[];
 };

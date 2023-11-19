@@ -17,7 +17,6 @@ interface CardProps {
   reply: boolean;
   replyingTo?: string;
   isCurrentUser: boolean;
-  handleDelete: (id: number) => void;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -30,11 +29,7 @@ export const Card: React.FC<CardProps> = ({
   reply,
   replyingTo,
   isCurrentUser,
-  handleDelete,
 }) => {
-  const onDelete = () => {
-    handleDelete(id);
-  };
   return (
     <div className={`${reply ? "border-l-2 pl-4 border-l-lightGray" : ""}  `}>
       <div className="bg-white p-4 rounded-lg flex flex-col gap-4 mb-4">
@@ -60,7 +55,7 @@ export const Card: React.FC<CardProps> = ({
           )}
           {isCurrentUser && (
             <div className="flex gap-4 items-center">
-              <button className="flex gap-1 items-center" onClick={onDelete}>
+              <button className="flex gap-1 items-center">
                 <Image className="h-4" src={deleteImage} alt="Delete Button" />
                 <div className="text-softRed font-medium">Delete</div>
               </button>

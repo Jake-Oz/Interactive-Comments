@@ -3,46 +3,38 @@ import { fetchComments } from "../lib/data";
 
 const CardLayout = async () => {
   const comments = await fetchComments();
+  console.log(comments);
 
   return (
     <div className="bg-veryLightGray p-2">
       {comments.map((comment) => (
         <>
-          {!comment.isReply && (
+          {!comment.is_reply ? (
             <Card
               key={comment.id}
               id={comment.id}
-              username={comment.user.username}
-              userImage={comment.user.image.png}
+              username={comment.username}
+              userImage={comment.image_png}
               content={comment.content}
-              createdAt={comment.createdAt}
+              createdAt={comment.created_at}
               score={comment.score}
-              reply={comment.isReply}
-              isCurrentUser={
-                data.currentUser.username === comment.user.username
-              }
-              handleDelete={handleDelete}
+              reply={comment.is_reply}
+              isCurrentUser={true}
+            />
+          ) : (
+            <Card
+              key={comment.id}
+              id={comment.id}
+              username={comment.username}
+              userImage={comment.image_png}
+              content={comment.content}
+              createdAt={comment.created_at}
+              score={comment.score}
+              reply={comment.is_reply}
+              replyingTo={"Replying to"}
+              isCurrentUser={false}
             />
           )}
-          {comment.replies.length > 0 &&
-            comment.replies.map((reply) => (
-              <Card
-                key={reply.id}
-                id={reply.id}
-                username={comments[reply.id - 1].user.username}
-                userImage={comments[reply.id - 1].user.image.png}
-                content={comments[reply.id - 1].content}
-                createdAt={comments[reply.id - 1].createdAt}
-                score={comments[reply.id - 1].score}
-                reply={comments[reply.id - 1].isReply}
-                replyingTo={reply.replyingTo}
-                isCurrentUser={
-                  data.currentUser.username ===
-                  data.comments[reply.id - 1].user.username
-                }
-                handleDelete={handleDelete}
-              />
-            ))}
         </>
       ))}
     </div>

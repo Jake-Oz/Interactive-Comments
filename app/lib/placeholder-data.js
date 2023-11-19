@@ -68,6 +68,11 @@ const comments = [
   },
 ];
 
+module.exports = {
+  users,
+  comments,
+};
+
 // {
 //   "currentUser": {
 //     "image": {

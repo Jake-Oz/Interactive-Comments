@@ -41,10 +41,10 @@ async function seedUsers(client) {
 
 async function seedComments(client) {
   try {
-    // Create the "invoices" table if it doesn't exist
+    // Create the "comments" table if it doesn't exist
     const createTable = await client.sql`
     CREATE TABLE IF NOT EXISTS comments (
-    id INT DEFAULT PRIMARY KEY,
+    id INT PRIMARY KEY,
     user_id UUID NOT NULL,
     content TEXT NOT NULL,
     created_at VARCHAR(255) NOT NULL,
@@ -66,7 +66,7 @@ async function seedComments(client) {
       )
     );
 
-    console.log(`Seeded ${insertedComments.length} invoices`);
+    console.log(`Seeded ${insertedComments.length} comments`);
 
     return {
       createTable,
@@ -80,12 +80,13 @@ async function seedComments(client) {
 
 async function seedCommentReply(client) {
   try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "comment-reply" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS comment_reply (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        comment_id int NOT NULL,
-        reply_id int NOT NULL,
+        comment_id INT,
+        reply_id INT 
       );
     `;
 
@@ -94,12 +95,13 @@ async function seedCommentReply(client) {
     // Insert data into the "comment-reply" table
     const insertedCommentReply = await Promise.all(
       comments.map((comment) => {
-        if (comment.replyCommentIds) {
+        if (comment.replyCommentIds.length > 0) {
+          console.log("Adding replies...");
           comment.replyCommentIds.map(
             (reply) =>
               client.sql`
         INSERT INTO comment_reply (comment_id, reply_id)
-        VALUES (${comment.id}, ${reply.id})
+        VALUES (${comment.id}, ${reply})
         ON CONFLICT (id) DO NOTHING;
       `
           );
@@ -122,9 +124,9 @@ async function seedCommentReply(client) {
 async function main() {
   const client = await db.connect();
 
+  await seedCommentReply(client);
   await seedUsers(client);
   await seedComments(client);
-  await seedCommentReply(client);
 
   await client.end();
 }
