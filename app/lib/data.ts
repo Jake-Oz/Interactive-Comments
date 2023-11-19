@@ -25,11 +25,6 @@ export async function fetchComments() {
 }
 
 export async function updateScore(id: number, score: number) {
-  console.log({
-    score,
-    POSTGRES_URL: process.env.POSTGRES_URL,
-    POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
-  });
   try {
     await sql`
           UPDATE comments 
