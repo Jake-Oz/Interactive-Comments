@@ -4,7 +4,7 @@ import plusIcon from "@/public/images/icon-plus.svg";
 import minusIcon from "@/public/images/icon-minus.svg";
 import Image from "next/image";
 import { useState } from "react";
-import { updateScore } from "../lib/data";
+import { comments } from "../lib/placeholder-data";
 
 interface UpvoteButtonScore {
   id: number;
@@ -17,10 +17,24 @@ const UpvoteButton: React.FC<UpvoteButtonScore> = ({ id, score }) => {
   const handleScoreUpdate = (direction: string) => {
     if (direction === "+") {
       setCurrentScore((prev) => prev + 1);
-      updateScore(id, currentScore + 1);
+      comments.map((comment) => {
+        if (comment.id === id) {
+          comment.score = currentScore + 1;
+        }
+        return comment;
+      });
+      window.localStorage.setItem("commentState", JSON.stringify(comments));
+      //updateScore(id, currentScore + 1);
     } else {
       setCurrentScore((prev) => prev - 1);
-      updateScore(id, currentScore - 1);
+      comments.map((comment) => {
+        if (comment.id === id) {
+          comment.score = currentScore - 1;
+        }
+        return comment;
+      });
+      window.localStorage.setItem("commentState", JSON.stringify(comments));
+      //updateScore(id, currentScore - 1);
     }
   };
 

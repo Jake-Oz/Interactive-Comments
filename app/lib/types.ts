@@ -47,5 +47,5 @@ export type comment = {
   created_at: string;
   score: number;
   is_reply: boolean;
-  replyCommentIds: number[];
+  replyingTo: string;
 };

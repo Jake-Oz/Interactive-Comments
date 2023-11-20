@@ -34,7 +34,7 @@ const comments = [
     createdAt: "1 month ago",
     score: 12,
     isReply: false,
-    replyCommentIds: [],
+    replyingTo: "",
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ const comments = [
     createdAt: "2 weeks ago",
     score: 5,
     isReply: false,
-    replyCommentIds: [3, 4],
+    replyingTo: "",
   },
   {
     id: 3,
@@ -54,17 +54,17 @@ const comments = [
     createdAt: "1 week ago",
     score: 4,
     isReply: true,
-    replyCommentIds: [],
+    replyingTo: users[2].username,
   },
   {
     id: 4,
-    userId: users[2].id,
+    userId: users[0].id,
     content:
       "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
     createdAt: "2 days ago",
     score: 2,
     isReply: true,
-    replyCommentIds: [],
+    replyingTo: users[3].username,
   },
 ];
 

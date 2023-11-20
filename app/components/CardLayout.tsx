@@ -1,40 +1,47 @@
-import Card from "./Card";
-import { fetchComments } from "../lib/data";
+"use client";
 
-const CardLayout = async () => {
-  const comments = await fetchComments();
-  console.log(comments);
+import Card from "./Card";
+import { users, comments } from "@/app/lib/placeholder-data";
+import { useEffect, useState } from "react";
+
+const CardLayout = () => {
+  const [localComments, setLocalComments] = useState<typeof comments>([]);
+
+  useEffect(() => {
+    const data = window.localStorage.getItem("commentState");
+    if (data !== null) {
+      console.log("Setting Local Comments to local storage values");
+      console.log(JSON.parse(data));
+      setLocalComments(JSON.parse(data));
+    } else {
+      setLocalComments(comments);
+      window.localStorage.setItem("commentState", JSON.stringify(comments));
+    }
+  }, []);
+
+  function findUser(userId: string) {
+    const userDetails = users.filter((user) => {
+      return user.id === userId;
+    });
+    return userDetails;
+  }
 
   return (
     <div className="bg-veryLightGray p-2">
-      {comments.map((comment) => (
+      {localComments.map((comment) => (
         <>
-          {!comment.is_reply ? (
-            <Card
-              key={comment.id}
-              id={comment.id}
-              username={comment.username}
-              userImage={comment.image_png}
-              content={comment.content}
-              createdAt={comment.created_at}
-              score={comment.score}
-              reply={comment.is_reply}
-              isCurrentUser={true}
-            />
-          ) : (
-            <Card
-              key={comment.id}
-              id={comment.id}
-              username={comment.username}
-              userImage={comment.image_png}
-              content={comment.content}
-              createdAt={comment.created_at}
-              score={comment.score}
-              reply={comment.is_reply}
-              replyingTo={"Replying to"}
-              isCurrentUser={false}
-            />
-          )}
+          <Card
+            key={comment.id}
+            id={comment.id}
+            username={findUser(comment.userId)[0].username}
+            userImage={findUser(comment.userId)[0].image_png}
+            content={comment.content}
+            createdAt={comment.createdAt}
+            score={comment.score}
+            reply={comment.isReply}
+            isCurrentUser={comment.userId === users[0].id}
+            replyingTo={comment.replyingTo}
+          />
         </>
       ))}
     </div>
